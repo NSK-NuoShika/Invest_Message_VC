@@ -61,6 +61,9 @@ def _imports(path: Path) -> list[tuple[int, str]]:
 def test_import_boundaries() -> None:
     violations: list[str] = []
     for path in sorted(SRC.rglob("*.py")):
+        # main.py 是装配入口，允许依赖任意包。
+        if path == SRC / "main.py":
+            continue
         package = _package_of(path)
         for lineno, module in _imports(path):
             if module != "src" and not module.startswith("src."):
