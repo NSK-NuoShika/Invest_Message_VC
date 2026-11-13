@@ -6,6 +6,7 @@ import re
 
 from src.database import db
 from src.larkbot import send
+from src.log import schedule_log
 from src.scheduler import jobs
 
 _TIME_PATTERN = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
@@ -30,4 +31,5 @@ def handle_schedule_add(user_id: str, args: list[str]) -> None:
         return
 
     jobs.add(user_id, hhmm)
+    schedule_log.add(user_id, hhmm)
     send.send_text(user_id, f"已添加定时：{hhmm}")

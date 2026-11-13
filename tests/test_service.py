@@ -318,6 +318,7 @@ def test_watchlist_delete_invalid_code(sent) -> None:
 def test_schedule_add_success(sent, monkeypatch) -> None:
     added: list[tuple[str, str]] = []
     jobs_added: list[tuple[str, str]] = []
+    logged: list[tuple[str, str]] = []
     monkeypatch.setattr(
         schedule_add.db,
         "add_schedule",
@@ -326,11 +327,15 @@ def test_schedule_add_success(sent, monkeypatch) -> None:
     monkeypatch.setattr(
         schedule_add.jobs, "add", lambda user_id, hhmm: jobs_added.append((user_id, hhmm))
     )
+    monkeypatch.setattr(
+        schedule_add.schedule_log, "add", lambda user_id, hhmm: logged.append((user_id, hhmm))
+    )
 
     schedule_add.handle_schedule_add("ou_1", ["09:30"])
 
     assert added == [("ou_1", "09:30")]
     assert jobs_added == [("ou_1", "09:30")]
+    assert logged == [("ou_1", "09:30")]
     assert sent.texts[0][1] == "已添加定时：09:30"
 
 
@@ -339,6 +344,9 @@ def test_schedule_add_duplicate_skips_job(sent, monkeypatch) -> None:
     monkeypatch.setattr(
         schedule_add.jobs, "add", lambda *args: pytest.fail("不应建调度任务")
     )
+    monkeypatch.setattr(
+        schedule_add.schedule_log, "add", lambda *args: pytest.fail("不应写 ADD 日志")
+    )
     schedule_add.handle_schedule_add("ou_1", ["09:30"])
     assert sent.texts[0][1] == "该时间点已存在"
 
@@ -346,6 +354,9 @@ def test_schedule_add_duplicate_skips_job(sent, monkeypatch) -> None:
 def test_schedule_add_invalid_time(sent, monkeypatch) -> None:
     monkeypatch.setattr(
         schedule_add.db, "add_schedule", lambda *args: pytest.fail("不应写库")
+    )
+    monkeypatch.setattr(
+        schedule_add.schedule_log, "add", lambda *args: pytest.fail("不应写 ADD 日志")
     )
     for value in ("9:30", "24:00", "09:60", "0930"):
         schedule_add.handle_schedule_add("ou_1", [value])
@@ -361,12 +372,19 @@ def test_schedule_add_argument_counts(sent) -> None:
 
 def test_schedule_delete_success(sent, monkeypatch) -> None:
     removed: list[tuple[str, str]] = []
+    logged: list[tuple[str, str]] = []
     monkeypatch.setattr(schedule_delete.db, "remove_schedule", lambda *args: True)
     monkeypatch.setattr(
         schedule_delete.jobs, "remove", lambda user_id, hhmm: removed.append((user_id, hhmm))
     )
+    monkeypatch.setattr(
+        schedule_delete.schedule_log,
+        "delete",
+        lambda user_id, hhmm: logged.append((user_id, hhmm)),
+    )
     schedule_delete.handle_schedule_delete("ou_1", ["09:30"])
     assert removed == [("ou_1", "09:30")]
+    assert logged == [("ou_1", "09:30")]
     assert sent.texts[0][1] == "已删除定时：09:30"
 
 
@@ -374,6 +392,9 @@ def test_schedule_delete_missing_skips_job(sent, monkeypatch) -> None:
     monkeypatch.setattr(schedule_delete.db, "remove_schedule", lambda *args: False)
     monkeypatch.setattr(
         schedule_delete.jobs, "remove", lambda *args: pytest.fail("不应删调度任务")
+    )
+    monkeypatch.setattr(
+        schedule_delete.schedule_log, "delete", lambda *args: pytest.fail("不应写 DEL 日志")
     )
     schedule_delete.handle_schedule_delete("ou_1", ["09:30"])
     assert sent.texts[0][1] == "该时间点不存在"
