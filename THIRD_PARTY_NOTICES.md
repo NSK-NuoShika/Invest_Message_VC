@@ -1,53 +1,6 @@
-# 第三方依赖许可声明
+# THIRD_PARTY_NOTICES.md
 
-本文件列出 Invest_Message 运行时直接与间接使用的第三方依赖，并附各依赖随包分发的许可证原文，
-以及许可证要求随附的声明（如 Apache-2.0 的 NOTICE）。
-
-## 一、依赖清单
-
-| 依赖 | 版本 | 类型 | 许可证 |
-|---|---|---|---|
-| akshare | 1.20.38 | 直接 | MIT |
-| APScheduler | 3.11.3 | 直接 | MIT |
-| beautifulsoup4 | 4.15.0 | 间接 | MIT License |
-| blinker | 1.9.0 | 间接 | MIT License |
-| certifi | 2026.10.23 | 间接 | MPL-2.0 |
-| cffi | 2.1.1 | 间接 | MIT-0 |
-| charset-normalizer | 3.5.2 | 间接 | MIT |
-| click | 8.5.1 | 间接 | BSD-3-Clause |
-| curl_cffi | 0.17.0 | 间接 | MIT |
-| Flask | 3.1.3 | 直接 | BSD-3-Clause |
-| html5lib | 1.1 | 间接 | MIT License |
-| idna | 3.20 | 间接 | BSD-3-Clause |
-| itsdangerous | 2.2.0 | 间接 | BSD License |
-| Jinja2 | 3.1.6 | 间接 | BSD License |
-| lxml | 6.1.3 | 间接 | BSD-3-Clause |
-| MarkupSafe | 3.0.4 | 间接 | BSD-3-Clause |
-| mini-racer | 0.14.1 | 间接 | ISC |
-| openpyxl | 3.1.5 | 间接 | MIT |
-| pandas | 3.1.1 | 间接 | BSD-3-Clause |
-| pillow | 13.0.0 | 间接 | MIT-CMU |
-| python-dateutil | 4.0.0 | 间接 | BSD-3-Clause |
-| python-dotenv | 1.2.4 | 直接 | BSD-3-Clause |
-| reportlab | 5.1.0 | 直接 | BSD License |
-| requests | 2.34.2 | 直接 | Apache-2.0 |
-| six | 1.17.0 | 间接 | MIT |
-| soupsieve | 4.1 | 间接 | MIT |
-| tqdm | 4.70.1 | 间接 | MPL-2.0 AND MIT |
-| tzdata | 2026.6 | 间接 | Apache-2.0 |
-| tzlocal | 5.4.5 | 间接 | MIT |
-| urllib3 | 2.8.0 | 间接 | MIT |
-| webencodings | 0.6.1 | 间接 | BSD License |
-| Werkzeug | 3.1.9 | 间接 | BSD-3-Clause |
-| xlrd | 2.0.2 | 间接 | BSD |
-
-## 二、许可证原文
-
-### akshare 1.20.38
-
-许可证：MIT
-
-#### akshare-1.20.38.dist-info/licenses/LICENSE
+## akshare 1.20.38
 
 ````text
 MIT License
@@ -73,11 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### APScheduler 3.11.3
-
-许可证：MIT
-
-#### apscheduler-3.11.3.dist-info/licenses/LICENSE.txt
+## APScheduler 3.11.3
 
 ````text
 This is the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -101,11 +50,7 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 DEALINGS IN THE SOFTWARE.
 ````
 
-### beautifulsoup4 4.15.0
-
-许可证：MIT License
-
-#### beautifulsoup4-4.15.0.dist-info/licenses/LICENSE
+## beautifulsoup4 4.15.0
 
 ````text
 Beautiful Soup is made available under the MIT license:
@@ -141,11 +86,7 @@ which is also made available under the MIT license. Copyright (c)
 Isaac Muse
 ````
 
-### blinker 1.9.0
-
-许可证：MIT License
-
-#### blinker-1.9.0.dist-info/LICENSE.txt
+## blinker 1.9.0
 
 ````text
 Copyright 2010 Jason Kirtland
@@ -170,11 +111,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
 
-### certifi 2026.10.23
-
-许可证：MPL-2.0
-
-#### certifi-2026.10.23.dist-info/licenses/LICENSE
+## certifi 2026.10.23
 
 ````text
 This package contains a modified version of ca-bundle.crt:
@@ -199,11 +136,7 @@ one at http://mozilla.org/MPL/2.0/.
 @(#) $RCSfile: certdata.txt,v $ $Revision: 1.80 $ $Date: 2011/11/03 15:11:58 $
 ````
 
-### cffi 2.1.1
-
-许可证：MIT-0
-
-#### cffi-2.1.1.dist-info/licenses/LICENSE
+## cffi 2.1.1
 
 ````text
 Except when otherwise stated (look for LICENSE files in directories or
@@ -229,11 +162,7 @@ documentation is licensed as follows:
     DEALINGS IN THE SOFTWARE.
 ````
 
-### charset-normalizer 3.5.2
-
-许可证：MIT
-
-#### charset_normalizer-3.5.2.dist-info/licenses/LICENSE
+## charset-normalizer 3.5.2
 
 ````text
 MIT License
@@ -259,11 +188,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### click 8.5.1
-
-许可证：BSD-3-Clause
-
-#### click-8.5.1.dist-info/licenses/LICENSE.txt
+## click 8.5.1
 
 ````text
 Copyright 2014 Pallets
@@ -296,11 +221,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### curl_cffi 0.17.0
-
-许可证：MIT
-
-#### curl_cffi-0.17.0.dist-info/licenses/LICENSE
+## curl_cffi 0.17.0
 
 ````text
 MIT License
@@ -328,11 +249,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### Flask 3.1.3
-
-许可证：BSD-3-Clause
-
-#### flask-3.1.3.dist-info/licenses/LICENSE.txt
+## Flask 3.1.3
 
 ````text
 Copyright 2010 Pallets
@@ -365,11 +282,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### html5lib 1.1
-
-许可证：MIT License
-
-#### html5lib-1.1.dist-info/LICENSE
+## html5lib 1.1
 
 ````text
 Copyright (c) 2006-2013 James Graham and other contributors
@@ -394,11 +307,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
 
-### idna 3.20
-
-许可证：BSD-3-Clause
-
-#### idna-3.20.dist-info/licenses/LICENSE.md
+## idna 3.20
 
 ````text
 BSD 3-Clause License
@@ -434,11 +343,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### itsdangerous 2.2.0
-
-许可证：BSD License
-
-#### itsdangerous-2.2.0.dist-info/LICENSE.txt
+## itsdangerous 2.2.0
 
 ````text
 Copyright 2011 Pallets
@@ -471,11 +376,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### Jinja2 3.1.6
-
-许可证：BSD License
-
-#### jinja2-3.1.6.dist-info/licenses/LICENSE.txt
+## Jinja2 3.1.6
 
 ````text
 Copyright 2007 Pallets
@@ -508,11 +409,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### lxml 6.1.3
-
-许可证：BSD-3-Clause
-
-#### lxml-6.1.3.dist-info/licenses/LICENSE.txt
+## lxml 6.1.3
 
 ````text
 BSD 3-Clause License
@@ -547,8 +444,6 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
-
-#### lxml-6.1.3.dist-info/licenses/LICENSES.txt
 
 ````text
 lxml is copyright Infrae and distributed under the BSD license (see
@@ -680,11 +575,7 @@ be used in advertising or otherwise to promote the sale, use or other deal-
 ings in this Software without prior written authorization from him.
 ````
 
-### MarkupSafe 3.0.4
-
-许可证：BSD-3-Clause
-
-#### markupsafe-3.0.4.dist-info/licenses/LICENSE.txt
+## MarkupSafe 3.0.4
 
 ````text
 Copyright 2010 Pallets
@@ -717,11 +608,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### mini-racer 0.14.1
-
-许可证：ISC
-
-#### mini_racer-0.14.1.dist-info/licenses/LICENSE
+## mini-racer 0.14.1
 
 ````text
 Copyright (c) 2018, Sqreen
@@ -740,11 +627,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ````
 
-### openpyxl 3.1.5
-
-许可证：MIT
-
-#### openpyxl-3.1.5.dist-info/LICENCE.rst
+## openpyxl 3.1.5
 
 ````text
 This software is under the MIT Licence
@@ -772,11 +655,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
 
-### pandas 3.1.1
-
-许可证：BSD-3-Clause
-
-#### pandas-3.1.1.dist-info/licenses/LICENSE
+## pandas 3.1.1
 
 ````text
 BSD 3-Clause License
@@ -812,8 +691,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/BOTTLENECK_LICENCE
-
 ````text
 Copyright (c) 2010-2019 Keith Goodman
 Copyright (c) 2019 Bottleneck Developers
@@ -841,8 +718,6 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/DATEUTIL_LICENSE
 
 ````text
 Copyright 2017- Paul Ganssle <paul@ganssle.io>
@@ -901,8 +776,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The above BSD License Applies to all code, even that also covered by Apache 2.0.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/HAVEN_LICENSE
-
 ````text
 # MIT License
 
@@ -926,8 +799,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/KLIB_LICENSE
 
 ````text
 The MIT License
@@ -954,8 +825,6 @@ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/MUSL_LICENSE
 
 ````text
 musl as a whole is licensed under the following standard MIT license:
@@ -1153,8 +1022,6 @@ permissive licensing, and of not having licensing issues being an
 obstacle to adoption, that text has been removed.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/NUMPY_LICENSE
-
 ````text
 Copyright (c) 2005-2023, NumPy Developers.
 All rights reserved.
@@ -1187,8 +1054,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/PACKAGING_LICENSE
 
 ````text
                                  Apache License
@@ -1393,8 +1258,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/PSF_LICENSE
 
 ````text
 A. HISTORY OF THE SOFTWARE
@@ -1678,8 +1541,6 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/PYPERCLIP_LICENSE
-
 ````text
 Copyright (c) 2014, Al Sweigart
 All rights reserved.
@@ -1710,8 +1571,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/PYUPGRADE_LICENSE
-
 ````text
 Copyright (c) 2017 Anthony Sottile
 
@@ -1734,8 +1593,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/SAS7BDAT_LICENSE
-
 ````text
 Copyright (c) 2015-2019 Jared Hobbs
 
@@ -1757,8 +1614,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/STATSBASE_JL_LICENSE
 
 ````text
 StatsBase.jl is licensed under the MIT License:
@@ -1785,8 +1640,6 @@ StatsBase.jl is licensed under the MIT License:
 > OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 > WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/LICENSES/ULTRAJSON_LICENSE
 
 ````text
 Developed by ESN, an Electronic Arts Inc. studio.
@@ -1905,8 +1758,6 @@ https://opensource.apple.com/source/tcl/tcl-14/tcl/license.terms
   terms specified in this license.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/LICENSES/XSIMD_LICENSE
-
 ````text
 Copyright (c) 2016, Johan Mabille, Sylvain Corlay, Wolf Vollprecht and Martin Renou
 Copyright (c) 2016, QuantStack
@@ -1938,8 +1789,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/subprojects/fast_float-8.2.10/LICENSE-APACHE
 
 ````text
                                  Apache License
@@ -2134,8 +1983,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 ````
 
-#### pandas-3.1.1.dist-info/licenses/subprojects/fast_float-8.2.10/LICENSE-BOOST
-
 ````text
 Boost Software License - Version 1.0 - August 17th, 2003
 
@@ -2161,8 +2008,6 @@ FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 ````
-
-#### pandas-3.1.1.dist-info/licenses/subprojects/fast_float-8.2.10/LICENSE-MIT
 
 ````text
 MIT License
@@ -2194,11 +2039,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 ````
 
-### pillow 13.0.0
-
-许可证：MIT-CMU
-
-#### pillow-13.0.0.dist-info/licenses/LICENSE
+## pillow 13.0.0
 
 ````text
 The Python Imaging Library (PIL) is
@@ -3832,11 +3673,7 @@ freely, subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 ````
 
-### python-dateutil 4.0.0
-
-许可证：BSD-3-Clause
-
-#### python_dateutil-4.0.0.dist-info/licenses/LICENSE
+## python-dateutil 4.0.0
 
 ````text
 Copyright 2017- Paul Ganssle <paul@ganssle.io>
@@ -3895,11 +3732,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The above BSD License Applies to all code, even that also covered by Apache 2.0.
 ````
 
-### python-dotenv 1.2.4
-
-许可证：BSD-3-Clause
-
-#### python_dotenv-1.2.4.dist-info/licenses/LICENSE
+## python-dotenv 1.2.4
 
 ````text
 Copyright (c) 2014, Saurabh Kumar (python-dotenv), 2013, Ted Tieken (django-dotenv-rw), 2013, Jacob Kaplan-Moss (django-dotenv)
@@ -3931,11 +3764,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### reportlab 5.1.0
-
-许可证：BSD License
-
-#### reportlab-5.1.0.dist-info/licenses/LICENSE
+## reportlab 5.1.0
 
 ````text
 #####################################################################################
@@ -3968,8 +3797,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #####################################################################################
 ````
-
-#### reportlab/fonts/DarkGarden-copying-gpl.txt
 
 ````text
 		    GNU GENERAL PUBLIC LICENSE
@@ -4313,8 +4140,6 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 ````
 
-#### reportlab/fonts/DarkGarden-copying.txt
-
 ````text
 Copyright (C) 1999, 2000, 2004 Michal Kosmulski 
 <mkosmul@users.sourceforge.net>
@@ -4343,8 +4168,6 @@ modify this font, you may extend this exception to your version of the
 font, but you are not obligated to do so. If you do not wish to do so,
 delete this exception statement from your version.
 ````
-
-#### reportlab/fonts/bitstream-vera-license.txt
 
 ````text
 Bitstream Vera Fonts Copyright
@@ -4472,8 +4295,6 @@ Copyright FAQ
       core server) has other mechanisms for font substitution.
 ````
 
-#### reportlab/license.txt
-
 ````text
 #####################################################################################
 #
@@ -4506,11 +4327,7 @@ Copyright FAQ
 #####################################################################################
 ````
 
-### requests 2.34.2
-
-许可证：Apache-2.0
-
-#### requests-2.34.2.dist-info/licenses/LICENSE
+## requests 2.34.2
 
 ````text
                                  Apache License
@@ -4689,18 +4506,12 @@ Copyright FAQ
       of your accepting any such warranty or additional liability.
 ````
 
-#### requests-2.34.2.dist-info/licenses/NOTICE
-
 ````text
 Requests
 Copyright 2019 Kenneth Reitz
 ````
 
-### six 1.17.0
-
-许可证：MIT
-
-#### six-1.17.0.dist-info/LICENSE
+## six 1.17.0
 
 ````text
 Copyright (c) 2010-2024 Benjamin Peterson
@@ -4723,11 +4534,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
 
-### soupsieve 4.1
-
-许可证：MIT
-
-#### soupsieve-4.1.dist-info/licenses/LICENSE.md
+## soupsieve 4.1
 
 ````text
 MIT License
@@ -4753,11 +4560,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### tqdm 4.70.1
-
-许可证：MPL-2.0 AND MIT
-
-#### tqdm-4.70.1.dist-info/licenses/LICENCE
+## tqdm 4.70.1
 
 ````text
 `tqdm` is a product of collaborative work.
@@ -4811,11 +4614,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ````
 
-### tzdata 2026.6
-
-许可证：Apache-2.0
-
-#### tzdata-2026.6.dist-info/licenses/LICENSE
+## tzdata 2026.6
 
 ````text
 Apache Software License 2.0
@@ -4835,8 +4634,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ````
-
-#### tzdata-2026.6.dist-info/licenses/licenses/LICENSE_APACHE
 
 ````text
                                  Apache License
@@ -5042,11 +4839,7 @@ limitations under the License.
    limitations under the License.
 ````
 
-### tzlocal 5.4.5
-
-许可证：MIT
-
-#### tzlocal-5.4.5.dist-info/licenses/LICENSE.txt
+## tzlocal 5.4.5
 
 ````text
 Copyright 2011-2017 Lennart Regebro
@@ -5070,11 +4863,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### urllib3 2.8.0
-
-许可证：MIT
-
-#### urllib3-2.8.0.dist-info/licenses/LICENSE.txt
+## urllib3 2.8.0
 
 ````text
 MIT License
@@ -5100,11 +4889,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ````
 
-### webencodings 0.6.1
-
-许可证：BSD License
-
-#### webencodings-0.6.1.dist-info/licenses/LICENSE
+## webencodings 0.6.1
 
 ````text
 BSD 3-Clause License
@@ -5138,11 +4923,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-### Werkzeug 3.1.9
-
-许可证：BSD-3-Clause
-
-#### werkzeug-3.1.9.dist-info/licenses/LICENSE.txt
+## Werkzeug 3.1.9
 
 ````text
 Copyright 2007 Pallets
@@ -5175,8 +4956,6 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ````
 
-#### werkzeug/debug/shared/ICON_LICENSE.md
-
 ````text
 Silk icon set 1.3 by Mark James <mjames@gmail.com>
 
@@ -5186,11 +4965,7 @@ License: [CC-BY-2.5](https://creativecommons.org/licenses/by/2.5/)
 or [CC-BY-3.0](https://creativecommons.org/licenses/by/3.0/)
 ````
 
-### xlrd 2.0.2
-
-许可证：BSD
-
-#### xlrd-2.0.2.dist-info/LICENSE
+## xlrd 2.0.2
 
 ````text
 There are two licenses associated with xlrd. This one relates to the bulk of
