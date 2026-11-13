@@ -1,4 +1,4 @@
-from src import main as main_module
+import main as main_module
 
 
 def test_main_order_and_scheduled_callback(monkeypatch) -> None:

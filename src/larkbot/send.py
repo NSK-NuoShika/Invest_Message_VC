@@ -6,8 +6,8 @@ import base64
 
 import requests
 
-from src.config.settings import get_setting
-from src.log import larkbot_log
+from config.settings import get_setting
+from log import larkbot_log
 
 DEFAULT_TEXT_URL = f"{get_setting().larkbot_url}/send/text"
 DEFAULT_FILE_URL = f"{get_setting().larkbot_url}/send/file"

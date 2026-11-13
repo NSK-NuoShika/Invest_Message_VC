@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import re
 
-from src.database import db
-from src.larkbot import send
-from src.log import schedule_log
-from src.scheduler import jobs
+from database import db
+from larkbot import send
+from log import schedule_log
+from scheduler import jobs
 
 _TIME_PATTERN = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
 

@@ -7,9 +7,9 @@ from typing import Callable
 
 from flask import Flask, jsonify, request
 
-from src.config.settings import get_setting
-from src.log import larkbot_log
-from src.service import route
+from config.settings import get_setting
+from log import larkbot_log
+from service import route
 
 Handler = Callable[[str, list[str]], None]
 

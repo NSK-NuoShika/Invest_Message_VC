@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from src.database import db
-from src.fund import fetcher
-from src.larkbot import send
-from src.pdf.renderer import ChartSpec, FundBlock, render
+from database import db
+from fund import fetcher
+from larkbot import send
+from pdf.renderer import ChartSpec, FundBlock, render
 
 RANGE_WORDS: dict[str, int] = {
     "今天": 1,

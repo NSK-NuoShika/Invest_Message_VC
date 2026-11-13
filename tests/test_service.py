@@ -3,9 +3,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from src.larkbot import send
-from src.model.fund import FundReport, NavPoint
-from src.service import (
+from larkbot import send
+from model.fund import FundReport, NavPoint
+from service import (
     query,
     route,
     schedule_add,

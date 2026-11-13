@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from src.larkbot import send
+from larkbot import send
 
 HELP_TEXT = """可用命令：
 基金 帮助

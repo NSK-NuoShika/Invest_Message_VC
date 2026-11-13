@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from src.database import db
-from src.larkbot import send
+from database import db
+from larkbot import send
 
 def handle_watchlist_query(user_id: str) -> None:
 

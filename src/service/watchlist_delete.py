@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from src.database import db
-from src.larkbot import send
+from database import db
+from larkbot import send
 
 def _is_code(value: str) -> bool:
     return len(value) == 6 and value.isdigit()

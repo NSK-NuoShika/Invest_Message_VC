@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from src.database import db
-from src.larkbot import send
+from database import db
+from larkbot import send
 
 def handle_schedule_query(user_id: str) -> None:
     """按时间升序逐行列出该用户的定时。"""

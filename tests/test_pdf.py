@@ -4,9 +4,9 @@ from pathlib import Path
 import pytest
 from reportlab.pdfbase import pdfmetrics
 
-from src.model.fund import NavPoint
-from src.pdf import fonts
-from src.pdf.renderer import ChartSpec, FundBlock, render
+from model.fund import NavPoint
+from pdf import fonts
+from pdf.renderer import ChartSpec, FundBlock, render
 
 TASK_LOG = Path(__file__).resolve().parents[1] / "log" / "task.log"
 TODAY = date(2026, 11, 11)

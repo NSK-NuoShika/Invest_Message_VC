@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from src.command import api
-from src.database import db
-from src.larkbot import worker
-from src.scheduler import jobs, rebuild
-from src.service import query
+from command import api
+from database import db
+from larkbot import worker
+from scheduler import jobs, rebuild
+from service import query
 
 
 def main() -> None:

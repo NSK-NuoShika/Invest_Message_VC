@@ -8,7 +8,7 @@ from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from src.log import schedule_log
+from log import schedule_log
 
 OnTrigger = Callable[[str], None]
 

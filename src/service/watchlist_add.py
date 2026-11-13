@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from src.database import db
-from src.fund import fetcher
-from src.larkbot import send
+from database import db
+from fund import fetcher
+from larkbot import send
 
 
 def _is_code(value: str) -> bool:

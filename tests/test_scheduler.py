@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from src.scheduler import jobs, rebuild
+from scheduler import jobs, rebuild
 
 SCHEDULE_LOG = Path(__file__).resolve().parents[1] / "log" / "schedule.log"
 

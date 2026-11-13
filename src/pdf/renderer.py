@@ -24,9 +24,9 @@ from reportlab.platypus import (
 from reportlab.platypus.flowables import HRFlowable
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
-from src.log import task_log
-from src.model.fund import NavPoint
-from src.pdf import fonts
+from log import task_log
+from model.fund import NavPoint
+from pdf import fonts
 
 MARGIN = 15 * mm
 TITLE = "Invest_Message"

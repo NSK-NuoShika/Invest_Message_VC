@@ -4,43 +4,53 @@ from pathlib import Path
 
 import pytest
 
-from src.model.fund import FundReport, NavPoint
+from model.fund import FundReport, NavPoint
 
 SRC = Path(__file__).resolve().parents[1] / "src"
 
+# 本项目自己的顶层包。
+INTERNAL_PACKAGES = {
+    "command",
+    "config",
+    "database",
+    "fund",
+    "larkbot",
+    "log",
+    "model",
+    "pdf",
+    "scheduler",
+    "service",
+}
+
 # 除同包内的模块外，架构允许的跨包依赖。
 ALLOWED_EDGES = {
-    ("src.command", "src.service"),
-    ("src.service", "src.database"),
-    ("src.service", "src.fund"),
-    ("src.service", "src.pdf"),
-    ("src.service", "src.scheduler"),
-    ("src.service", "src.larkbot"),
-    ("src.scheduler", "src.database"),
-    ("src.fund", "src.model"),
-    ("src.pdf", "src.model"),
-    ("src.larkbot", "src.config"),
+    ("command", "service"),
+    ("service", "database"),
+    ("service", "fund"),
+    ("service", "pdf"),
+    ("service", "scheduler"),
+    ("service", "larkbot"),
+    ("scheduler", "database"),
+    ("fund", "model"),
+    ("pdf", "model"),
+    ("larkbot", "config"),
 }
 
 # 所有模块都可以依赖的包。
-UNIVERSAL_PACKAGES = {"src.config", "src.log", "src.model"}
+UNIVERSAL_PACKAGES = {"config", "log", "model"}
 
 
 def _package_of(path: Path) -> str:
     """文件所属的包。文件自身是模块，去掉最后一段即包名。"""
 
-    relative = path.relative_to(SRC).with_suffix("")
-    parts = list(relative.parts)[:-1]
-    return ".".join(["src", *parts])
+    parts = list(path.relative_to(SRC).with_suffix("").parts)[:-1]
+    return ".".join(parts)
 
 
 def _resolve_package(module: str) -> str:
-    """把被导入的模块名折算为所属的包名。"""
+    """把被导入的模块名折算为所属的顶层包名。"""
 
-    parts = module.split(".")
-    if len(parts) <= 2:
-        return module
-    return ".".join(parts[:2])
+    return module.split(".")[0]
 
 
 def _imports(path: Path) -> list[tuple[int, str]]:
@@ -66,9 +76,9 @@ def test_import_boundaries() -> None:
             continue
         package = _package_of(path)
         for lineno, module in _imports(path):
-            if module != "src" and not module.startswith("src."):
-                continue
             target = _resolve_package(module)
+            if target not in INTERNAL_PACKAGES:
+                continue
             if target == package:
                 continue
             if target in UNIVERSAL_PACKAGES:

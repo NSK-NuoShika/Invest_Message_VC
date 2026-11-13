@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import TextIO
 
-from src.log import _LOCK
+from log import _LOCK
 
 _LOG_DIR = Path(__file__).resolve().parents[2] / "log"
 _LOG_DIR.mkdir(parents=True, exist_ok=True)

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from src.database import connection, db
+from database import connection, db
 
 
 @pytest.fixture

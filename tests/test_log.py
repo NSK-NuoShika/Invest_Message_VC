@@ -3,7 +3,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from src.log import _LOCK, larkbot_log, schedule_log, task_log
+from log import _LOCK, larkbot_log, schedule_log, task_log
 
 LOG_DIR = Path(__file__).resolve().parents[1] / "log"
 

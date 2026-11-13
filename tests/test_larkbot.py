@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 import requests
 
-from src.config.settings import get_setting
-from src.larkbot import send, worker
+from config.settings import get_setting
+from larkbot import send, worker
 
 LARKBOT_LOG = Path(__file__).resolve().parents[1] / "log" / "larkbot.log"
 
@@ -54,14 +54,14 @@ def test_send_text(monkeypatch) -> None:
     assert send.send_text("ou_1", "你好") is True
     assert captured == [
         (
-            "http://127.0.0.1:8000/send/text",
-            {"program": "基金", "target": "ou_1", "content": "你好"},
+            send.DEFAULT_TEXT_URL,
+            {"program": get_setting().program_name, "target": "ou_1", "content": "你好"},
             5.0,
         )
     ]
     row = _log_rows()[0]
     assert len(row) == 7
-    assert row[1:4] == ["SEND", "http://127.0.0.1:8000/send/text", "TEXT"]
+    assert row[1:4] == ["SEND", send.DEFAULT_TEXT_URL, "TEXT"]
     assert row[4:] == ["ou_1", "200", "0"]
 
 
@@ -71,12 +71,12 @@ def test_send_file_base64_has_no_newline(monkeypatch) -> None:
     _install_post(monkeypatch, send, captured)
     assert send.send_file("ou_1", "报告.pdf", b"abc") is True
     url, payload, _ = captured[0]
-    assert url == "http://127.0.0.1:8000/send/file"
+    assert url == send.DEFAULT_FILE_URL
     assert payload["file_name"] == "报告.pdf"
     assert payload["content_base64"] == base64.b64encode(b"abc").decode("ascii")
     assert "\n" not in payload["content_base64"]
     row = _log_rows()[0]
-    assert row[1:4] == ["SEND", "http://127.0.0.1:8000/send/file", "FILE"]
+    assert row[1:4] == ["SEND", send.DEFAULT_FILE_URL, "FILE"]
 
 
 def test_send_http_error_returns_business_code(monkeypatch) -> None:
@@ -126,9 +126,9 @@ def test_register_all(monkeypatch) -> None:
         "/schedule",
     ]
     for url, payload, timeout in captured:
-        assert url == "http://127.0.0.1:8000/register"
+        assert url == f"{setting.larkbot_url}/register"
         assert timeout == worker._TIMEOUT
-        assert payload["program"] == "基金"
+        assert payload["program"] == setting.program_name
         assert payload["base_url"] == f"http://127.0.0.1:{setting.port}"
 
     rows = _log_rows()

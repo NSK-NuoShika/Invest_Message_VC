@@ -7,8 +7,8 @@ from datetime import date
 import akshare as ak
 import pandas as pd
 
-from src.log import task_log
-from src.model.fund import FundReport, NavPoint
+from log import task_log
+from model.fund import FundReport, NavPoint
 
 _INDICATOR = "单位净值走势"
 

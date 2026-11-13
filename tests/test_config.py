@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from src.config.settings import get_setting
+from config.settings import get_setting
 
 BASE_ENV = {
     "PROGRAM_NAME": "演示",
@@ -24,7 +24,7 @@ def build_settings(tmp_path: Path):
     """在临时目录写入 .env，直接调用内部构造函数，避免重载模块带来的副作用。"""
 
     def _build(content: str | None):
-        module = importlib.import_module("src.config.settings")
+        module = importlib.import_module("config.settings")
         if content is None:
             env_path = tmp_path / "missing.env"
         else:
@@ -49,7 +49,7 @@ def test_defaults_without_env(build_settings) -> None:
 
 
 def test_singleton_is_shared() -> None:
-    module = importlib.import_module("src.config.settings")
+    module = importlib.import_module("config.settings")
     assert module.get_setting() is module.settings
     assert get_setting() is module.settings
 

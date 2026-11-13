@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from src.database import db
-from src.scheduler import jobs
+from database import db
+from scheduler import jobs
 
 
 def rebuild() -> None:

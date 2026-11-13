@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from src.command import api
-from src.service import route
+from command import api
+from service import route
 
 LARKBOT_LOG = Path(__file__).resolve().parents[1] / "log" / "larkbot.log"
 

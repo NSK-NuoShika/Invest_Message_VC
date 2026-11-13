@@ -7,8 +7,8 @@ import time
 
 import requests
 
-from src.config.settings import get_setting
-from src.log import larkbot_log
+from config.settings import get_setting
+from log import larkbot_log
 
 PROGRAM_URL = f"http://127.0.0.1:{get_setting().port}"
 LARKBOT_REGISTER_URL = f"{get_setting().larkbot_url}/register"

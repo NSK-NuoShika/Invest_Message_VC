@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sqlite3
 
-from src.database.connection import get_connection
+from database.connection import get_connection
 
 _CREATE_USERS = """
 CREATE TABLE IF NOT EXISTS users (

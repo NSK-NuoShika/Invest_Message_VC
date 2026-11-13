@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from src.larkbot import send
-from src.service import (
+from larkbot import send
+from service import (
     help,
     query,
     schedule_add,

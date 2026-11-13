@@ -5,8 +5,8 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from src.fund import fetcher
-from src.model.fund import NavPoint
+from fund import fetcher
+from model.fund import NavPoint
 
 TASK_LOG = Path(__file__).resolve().parents[1] / "log" / "task.log"
 
