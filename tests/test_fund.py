@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pandas as pd
 import pytest
@@ -23,6 +23,22 @@ def _frame(rows: list[tuple[date, float, float | None]]) -> pd.DataFrame:
     )
 
 
+def _name_frame(name: str = "测试基金") -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "item": ["基金代码", "基金名称"],
+            "value": ["000001", name],
+        }
+    )
+
+
+@pytest.fixture(autouse=True)
+def name_api(monkeypatch) -> Mock:
+    mock = Mock(return_value=_name_frame())
+    monkeypatch.setattr(fetcher.ak, "fund_individual_basic_info_xq", mock)
+    return mock
+
+
 def _reset_log() -> None:
     TASK_LOG.write_text("", encoding="utf-8")
 
@@ -36,7 +52,7 @@ def _fetch(code: str = "000001", days: int = 7):
     return fetcher.fetch(code, TODAY - timedelta(days=days), TODAY)
 
 
-def test_normal_returns_filtered_sorted_points() -> None:
+def test_normal_returns_filtered_sorted_points(name_api) -> None:
     _reset_log()
     frame = _frame(
         [
@@ -49,12 +65,49 @@ def test_normal_returns_filtered_sorted_points() -> None:
         report = _fetch()
 
     mocked.assert_called_once_with(symbol="000001", indicator="单位净值走势")
+    name_api.assert_called_once_with(symbol="000001")
     assert report.code == "000001"
-    assert report.name == "000001"
+    assert report.name == "测试基金"
     assert report.points == [
         NavPoint(date=TODAY - timedelta(days=1), nav=1.23, growth=0.20),
         NavPoint(date=TODAY, nav=1.2345, growth=0.55),
     ]
+
+
+def test_name_api_failure_falls_back_to_code(monkeypatch) -> None:
+    _reset_log()
+    monkeypatch.setattr(
+        fetcher.ak,
+        "fund_individual_basic_info_xq",
+        Mock(side_effect=ValueError("名称接口失败")),
+    )
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=_frame([])):
+        report = _fetch()
+    assert report.name == "000001"
+
+
+def test_blank_name_falls_back_to_code(monkeypatch) -> None:
+    _reset_log()
+    monkeypatch.setattr(
+        fetcher.ak,
+        "fund_individual_basic_info_xq",
+        Mock(return_value=_name_frame("   ")),
+    )
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=_frame([])):
+        report = _fetch()
+    assert report.name == "000001"
+
+
+def test_name_is_stripped(monkeypatch) -> None:
+    _reset_log()
+    monkeypatch.setattr(
+        fetcher.ak,
+        "fund_individual_basic_info_xq",
+        Mock(return_value=_name_frame("  华夏成长  ")),
+    )
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=_frame([])):
+        report = _fetch()
+    assert report.name == "华夏成长"
 
 
 def test_boundaries_are_inclusive() -> None:

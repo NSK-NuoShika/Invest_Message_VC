@@ -182,12 +182,40 @@ def test_query_specified_code_skips_watchlist(sent, rendered, monkeypatch) -> No
     monkeypatch.setattr(
         query.db, "list_watch", lambda user_id: pytest.fail("不应读取自选")
     )
-    calls = _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10))
+    calls = _patch_fetch(
+        monkeypatch, lambda code, start, end: _report(code, days=10, name="华夏成长")
+    )
 
     query.handle_query("ou_1", ["161725", "7天"])
 
     assert calls[0][0] == "161725"
+    assert rendered[0][0].name == "华夏成长"
+    assert len(sent.files) == 1
+
+
+def test_query_specified_code_falls_back_to_code_without_name(
+    sent, rendered, monkeypatch
+) -> None:
+    monkeypatch.setattr(
+        query.db, "list_watch", lambda user_id: pytest.fail("不应读取自选")
+    )
+    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10))
+
+    query.handle_query("ou_1", ["161725", "7天"])
+
     assert rendered[0][0].name == "161725"
+    assert len(sent.files) == 1
+
+
+def test_query_prefers_fetched_name_over_stale_code(sent, rendered, monkeypatch) -> None:
+    monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "000001")])
+    _patch_fetch(
+        monkeypatch, lambda code, start, end: _report(code, days=10, name="华夏成长")
+    )
+
+    query.handle_query("ou_1", ["7天"])
+
+    assert rendered[0][0].name == "华夏成长"
     assert len(sent.files) == 1
 
 
@@ -260,6 +288,25 @@ def test_watchlist_add_success(sent, monkeypatch) -> None:
 
     assert added == [("ou_1", "000001", "000001")]
     assert sent.texts[0][1] == "已添加自选：000001 000001"
+
+
+def test_watchlist_add_stores_fetched_name(sent, monkeypatch) -> None:
+    _patch_fetch(
+        monkeypatch,
+        lambda code, start, end: _report(code, days=10, name="华夏成长"),
+        watchlist_add,
+    )
+    added: list[tuple[str, str, str]] = []
+    monkeypatch.setattr(
+        watchlist_add.db,
+        "add_watch",
+        lambda user_id, code, name: added.append((user_id, code, name)) or True,
+    )
+
+    watchlist_add.handle_watchlist_add("ou_1", ["000001"])
+
+    assert added == [("ou_1", "000001", "华夏成长")]
+    assert sent.texts[0][1] == "已添加自选：000001 华夏成长"
 
 
 def test_watchlist_add_existing(sent, monkeypatch) -> None:

@@ -70,7 +70,7 @@ def handle_query(user_id: str, args: list[str]) -> None:
             return
         targets = list(watchlist)
     else:
-        targets = [(code, code)]
+        targets = [(code, None)]
 
     max_days = max(RANGE_WORDS[word] for word in words)
     end_time = _today()
@@ -93,12 +93,16 @@ def handle_query(user_id: str, args: list[str]) -> None:
             failures.append(fund_code)
             continue
 
+        name = report.name
+        if not name or name == fund_code:
+            name = fund_name or fund_code
+
         points = report.points
         last = points[-1]
         blocks.append(
             FundBlock(
                 code=fund_code,
-                name=fund_name,
+                name=name,
                 day_change=last.growth,
                 day_change_date=last.date,
                 updated_today=last.date == end_time,

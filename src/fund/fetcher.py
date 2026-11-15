@@ -56,5 +56,15 @@ def fetch(code: str, start_time: date, end_time: date) -> FundReport:
     except Exception:
         task_log.fetch(code, _elapsed_ms(started), "FAIL")
         raise
+
+    name = code
+    try:
+        info = ak.fund_individual_basic_info_xq(symbol=code)
+        matched = info.loc[info["item"] == "基金名称", "value"]
+        if not matched.empty and not pd.isna(matched.iloc[0]):
+            name = str(matched.iloc[0]).strip() or code
+    except Exception:
+        name = code
+
     task_log.fetch(code, _elapsed_ms(started), "OK")
-    return FundReport(code=code, name=code, points=points)
+    return FundReport(code=code, name=name, points=points)
