@@ -44,11 +44,12 @@ def _block(**overrides) -> FundBlock:
 
 
 def test_fonts_register_is_idempotent() -> None:
-    name = fonts.register()
-    assert name == fonts.FONT_NAME
-    assert fonts.register() == name
-    assert pdfmetrics.getFont(fonts.FONT_NAME) is not None
-    assert pdfmetrics.getFont(fonts.BOLD_NAME) is not None
+    name, bold = fonts.register()
+    assert (name, bold) == (fonts.NORMAL_NAME, fonts.BOLD_NAME)
+    assert fonts.register() == (name, bold)
+    assert pdfmetrics.getFont(name) is not None
+    assert pdfmetrics.getFont(bold) is not None
+    assert pdfmetrics.getFont(bold) is not pdfmetrics.getFont(name)
 
 
 def test_empty_blocks_raises_and_logs_fail() -> None:

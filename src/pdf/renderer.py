@@ -275,8 +275,7 @@ def render(blocks: list[FundBlock]) -> bytes:
     try:
         if not blocks:
             raise ValueError("blocks 不能为空")
-        font = fonts.register()
-        bold_font = fonts.BOLD_NAME
+        font, bold_font = fonts.register()
         buffer = BytesIO()
         document = SimpleDocTemplate(
             buffer,
