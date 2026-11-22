@@ -1,3 +1,5 @@
+import threading
+import time
 from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -181,3 +183,31 @@ def test_success_logs_ok() -> None:
     rows = _log_rows()
     assert len(rows) == 1
     assert rows[0][1:] == ["FETCH", "161725", rows[0][3], "OK"]
+
+
+def test_concurrent_fetches_are_serialized() -> None:
+    """同一时刻只允许一个线程进入 akshare，避免并发创建 V8 isolate。"""
+
+    _reset_log()
+    depth = 0
+    peak = 0
+    guard = threading.Lock()
+
+    def fake(symbol: str, indicator: str) -> pd.DataFrame:
+        nonlocal depth, peak
+        with guard:
+            depth += 1
+            peak = max(peak, depth)
+        time.sleep(0.05)
+        with guard:
+            depth -= 1
+        return _frame([])
+
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", side_effect=fake):
+        threads = [threading.Thread(target=_fetch) for _ in range(4)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+    assert peak == 1
