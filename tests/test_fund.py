@@ -50,11 +50,11 @@ def _log_rows() -> list[list[str]]:
     return [line.split(" ") for line in lines if line]
 
 
-def _fetch(code: str = "000001", days: int = 7):
-    return fetcher.fetch(code, TODAY - timedelta(days=days), TODAY)
+def _fetch(code: str = "000001", count: int = 7):
+    return fetcher.fetch(code, count)
 
 
-def test_normal_returns_filtered_sorted_points(name_api) -> None:
+def test_returns_latest_count_sorted_by_date(name_api) -> None:
     _reset_log()
     frame = _frame(
         [
@@ -64,7 +64,7 @@ def test_normal_returns_filtered_sorted_points(name_api) -> None:
         ]
     )
     with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=frame) as mocked:
-        report = _fetch()
+        report = _fetch(count=2)
 
     mocked.assert_called_once_with(symbol="000001", indicator="单位净值走势")
     name_api.assert_called_once_with(symbol="000001")
@@ -74,6 +74,49 @@ def test_normal_returns_filtered_sorted_points(name_api) -> None:
         NavPoint(date=TODAY - timedelta(days=1), nav=1.23, growth=0.20),
         NavPoint(date=TODAY, nav=1.2345, growth=0.55),
     ]
+
+
+def test_count_one_returns_latest_record() -> None:
+    _reset_log()
+    frame = _frame(
+        [
+            (TODAY - timedelta(days=2), 1.2000, -0.10),
+            (TODAY - timedelta(days=1), 1.2300, 0.20),
+        ]
+    )
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=frame):
+        report = _fetch(count=1)
+    assert report.points == [
+        NavPoint(date=TODAY - timedelta(days=1), nav=1.23, growth=0.20)
+    ]
+
+
+def test_count_larger_than_data_returns_all() -> None:
+    _reset_log()
+    frame = _frame(
+        [
+            (TODAY - timedelta(days=2), 1.1, 0.0),
+            (TODAY - timedelta(days=1), 1.2, 0.1),
+            (TODAY, 1.3, 0.2),
+        ]
+    )
+    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=frame):
+        report = _fetch(count=10)
+    assert [point.date for point in report.points] == [
+        TODAY - timedelta(days=2),
+        TODAY - timedelta(days=1),
+        TODAY,
+    ]
+
+
+def test_count_must_be_positive() -> None:
+    _reset_log()
+    with patch.object(fetcher.ak, "fund_open_fund_info_em") as mocked:
+        for bad in (0, -1):
+            with pytest.raises(ValueError):
+                _fetch(count=bad)
+        mocked.assert_not_called()
+    assert _log_rows() == []
 
 
 def test_name_api_failure_falls_back_to_code(monkeypatch) -> None:
@@ -110,23 +153,6 @@ def test_name_is_stripped(monkeypatch) -> None:
     with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=_frame([])):
         report = _fetch()
     assert report.name == "华夏成长"
-
-
-def test_boundaries_are_inclusive() -> None:
-    _reset_log()
-    frame = _frame(
-        [
-            (TODAY - timedelta(days=8), 1.1, 0.0),
-            (TODAY - timedelta(days=7), 1.2, 0.1),
-            (TODAY, 1.3, 0.2),
-        ]
-    )
-    with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=frame):
-        report = _fetch()
-    assert [point.date for point in report.points] == [
-        TODAY - timedelta(days=7),
-        TODAY,
-    ]
 
 
 def test_money_market_fund_returns_empty_points() -> None:
@@ -170,7 +196,7 @@ def test_nan_nav_is_skipped_and_missing_growth_is_none() -> None:
         ]
     )
     with patch.object(fetcher.ak, "fund_open_fund_info_em", return_value=frame):
-        report = _fetch()
+        report = _fetch(count=10)
     assert [point.date for point in report.points] == [TODAY - timedelta(days=2), TODAY]
     assert report.points[0].growth == pytest.approx(0.1)
     assert report.points[1].growth is None

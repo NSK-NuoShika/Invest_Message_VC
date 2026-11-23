@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
-
 from database import db
 from fund import fetcher
 from larkbot import send
+
+_PROBE_COUNT = 5
 
 
 def _is_code(value: str) -> bool:
@@ -27,9 +27,8 @@ def handle_watchlist_add(user_id: str, args: list[str]) -> None:
         send.send_text(user_id, "基金代码必须是六位数字")
         return
 
-    today = date.today()
     try:
-        report = fetcher.fetch(code, today - timedelta(days=7), today)
+        report = fetcher.fetch(code, _PROBE_COUNT)
     except Exception:
         send.send_text(user_id, "查询基金信息失败，请稍后重试")
         return

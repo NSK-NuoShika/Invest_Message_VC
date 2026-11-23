@@ -57,11 +57,11 @@ def rendered(monkeypatch):
 
 
 def _patch_fetch(monkeypatch, handler, module=query):
-    calls: list[tuple[str, date, date]] = []
+    calls: list[tuple[str, int]] = []
 
-    def fetch(code: str, start_time: date, end_time: date) -> FundReport:
-        calls.append((code, start_time, end_time))
-        return handler(code, start_time, end_time)
+    def fetch(code: str, count: int) -> FundReport:
+        calls.append((code, count))
+        return handler(code, count)
 
     monkeypatch.setattr(module.fetcher, "fetch", fetch)
     return calls
@@ -91,14 +91,15 @@ def test_query_code_without_range_word(sent) -> None:
 
 def test_query_fetches_once_with_max_range(sent, rendered, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "华夏成长")])
-    calls = _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=400))
+    calls = _patch_fetch(monkeypatch, lambda code, count: _report(code, days=400))
 
     query.handle_query("ou_1", ["7天", "1年"])
 
-    assert calls == [("000001", TODAY - timedelta(days=365), TODAY)]
+    assert calls == [("000001", 365)]
     blocks = rendered[0]
     assert len(blocks) == 1
     assert [chart.caption for chart in blocks[0].charts] == ["近 7 天", "近 1 年"]
+    assert [len(chart.points) for chart in blocks[0].charts] == [7, 365]
     assert blocks[0].name == "华夏成长"
     assert len(blocks[0].table_points) == 400
     assert len(sent.files) == 1
@@ -108,27 +109,28 @@ def test_query_fetches_once_with_max_range(sent, rendered, monkeypatch) -> None:
 
 def test_query_chart_order_ascending(sent, rendered, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "甲")])
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=1200))
+    calls = _patch_fetch(monkeypatch, lambda code, count: _report(code, days=1200))
 
     query.handle_query("ou_1", ["5年", "7天", "1年"])
 
-    captions = [chart.caption for chart in rendered[0][0].charts]
-    assert captions == ["近 7 天", "近 1 年", "近 5 年"]
-    assert all(
-        point.date >= TODAY - timedelta(days=7)
-        for point in rendered[0][0].charts[0].points
-    )
+    assert calls == [("000001", 1825)]
+    charts = rendered[0][0].charts
+    assert [chart.caption for chart in charts] == ["近 7 天", "近 1 年", "近 5 年"]
+    assert [len(chart.points) for chart in charts] == [7, 365, 1200]
 
 
 def test_query_today_only_has_no_charts_or_table(sent, rendered, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "甲")])
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10))
+    calls = _patch_fetch(monkeypatch, lambda code, count: _report(code, days=count))
 
     query.handle_query("ou_1", ["今天"])
 
+    assert calls == [("000001", 1)]
     block = rendered[0][0]
     assert block.charts == []
     assert block.table_points == []
+    assert block.updated_today is True
+    assert block.day_change_date == TODAY
     assert len(sent.files) == 1
 
 
@@ -137,7 +139,7 @@ def test_query_failure_text_before_pdf(sent, rendered, monkeypatch) -> None:
         query.db, "list_watch", lambda user_id: [("000001", "甲"), ("161725", "乙")]
     )
 
-    def handler(code: str, start: date, end: date) -> FundReport:
+    def handler(code: str, count: int) -> FundReport:
         if code == "161725":
             raise ValueError("network")
         return _report(code, days=10)
@@ -158,7 +160,7 @@ def test_query_all_failed_sends_text_only(sent, rendered, monkeypatch) -> None:
         query.db, "list_watch", lambda user_id: [("000001", "甲"), ("161725", "乙")]
     )
 
-    def handler(code: str, start: date, end: date) -> FundReport:
+    def handler(code: str, count: int) -> FundReport:
         raise ValueError("network")
 
     _patch_fetch(monkeypatch, handler)
@@ -172,7 +174,7 @@ def test_query_all_failed_sends_text_only(sent, rendered, monkeypatch) -> None:
 
 def test_query_empty_watchlist(sent, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [])
-    calls = _patch_fetch(monkeypatch, lambda code, start, end: _report(code))
+    calls = _patch_fetch(monkeypatch, lambda code, count: _report(code))
     query.handle_query("ou_1", ["7天"])
     assert calls == []
     assert "自选列表为空" in sent.texts[0][1]
@@ -183,12 +185,12 @@ def test_query_specified_code_skips_watchlist(sent, rendered, monkeypatch) -> No
         query.db, "list_watch", lambda user_id: pytest.fail("不应读取自选")
     )
     calls = _patch_fetch(
-        monkeypatch, lambda code, start, end: _report(code, days=10, name="华夏成长")
+        monkeypatch, lambda code, count: _report(code, days=10, name="华夏成长")
     )
 
     query.handle_query("ou_1", ["161725", "7天"])
 
-    assert calls[0][0] == "161725"
+    assert calls == [("161725", 7)]
     assert rendered[0][0].name == "华夏成长"
     assert len(sent.files) == 1
 
@@ -199,7 +201,7 @@ def test_query_specified_code_falls_back_to_code_without_name(
     monkeypatch.setattr(
         query.db, "list_watch", lambda user_id: pytest.fail("不应读取自选")
     )
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10))
+    _patch_fetch(monkeypatch, lambda code, count: _report(code, days=10))
 
     query.handle_query("ou_1", ["161725", "7天"])
 
@@ -210,7 +212,7 @@ def test_query_specified_code_falls_back_to_code_without_name(
 def test_query_prefers_fetched_name_over_stale_code(sent, rendered, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "000001")])
     _patch_fetch(
-        monkeypatch, lambda code, start, end: _report(code, days=10, name="华夏成长")
+        monkeypatch, lambda code, count: _report(code, days=10, name="华夏成长")
     )
 
     query.handle_query("ou_1", ["7天"])
@@ -221,7 +223,7 @@ def test_query_prefers_fetched_name_over_stale_code(sent, rendered, monkeypatch)
 
 def test_query_render_failure_sends_text(sent, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "甲")])
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10))
+    _patch_fetch(monkeypatch, lambda code, count: _report(code, days=10))
     monkeypatch.setattr(query, "render", lambda blocks: (_ for _ in ()).throw(RuntimeError()))
 
     query.handle_query("ou_1", ["7天"])
@@ -240,7 +242,7 @@ def test_query_day_change_and_update_flag(sent, rendered, monkeypatch) -> None:
             NavPoint(date=TODAY - timedelta(days=1), nav=1.1, growth=0.55),
         ],
     )
-    _patch_fetch(monkeypatch, lambda code, start, end: report)
+    _patch_fetch(monkeypatch, lambda code, count: report)
 
     query.handle_query("ou_1", ["7天"])
 
@@ -252,13 +254,39 @@ def test_query_day_change_and_update_flag(sent, rendered, monkeypatch) -> None:
 
 def test_query_marks_updated_today(sent, rendered, monkeypatch) -> None:
     monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "甲")])
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=3))
+    _patch_fetch(monkeypatch, lambda code, count: _report(code, days=count))
 
     query.handle_query("ou_1", ["今天"])
 
     block = rendered[0][0]
     assert block.updated_today is True
     assert block.day_change_date == TODAY
+
+
+def test_query_today_falls_back_to_last_published_record(
+    sent, rendered, monkeypatch
+) -> None:
+    """当日净值未发布时，用最近一条已发布记录并在 PDF 中标注未更新。"""
+
+    monkeypatch.setattr(query.db, "list_watch", lambda user_id: [("000001", "甲")])
+    last = TODAY - timedelta(days=3)
+    _patch_fetch(
+        monkeypatch,
+        lambda code, count: FundReport(
+            code=code,
+            name="甲",
+            points=[NavPoint(date=last, nav=1.1, growth=0.42)],
+        ),
+    )
+
+    query.handle_query("ou_1", ["今天"])
+
+    block = rendered[0][0]
+    assert block.updated_today is False
+    assert block.day_change_date == last
+    assert block.day_change == 0.42
+    assert len(sent.files) == 1
+    assert sent.texts == []
 
 
 def test_watchlist_query_lists_in_order(sent, monkeypatch) -> None:
@@ -276,7 +304,9 @@ def test_watchlist_query_empty(sent, monkeypatch) -> None:
 
 
 def test_watchlist_add_success(sent, monkeypatch) -> None:
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10), watchlist_add)
+    calls = _patch_fetch(
+        monkeypatch, lambda code, count: _report(code, days=10), watchlist_add
+    )
     added: list[tuple[str, str, str]] = []
     monkeypatch.setattr(
         watchlist_add.db,
@@ -286,6 +316,7 @@ def test_watchlist_add_success(sent, monkeypatch) -> None:
 
     watchlist_add.handle_watchlist_add("ou_1", ["000001"])
 
+    assert calls == [("000001", 5)]
     assert added == [("ou_1", "000001", "000001")]
     assert sent.texts[0][1] == "已添加自选：000001 000001"
 
@@ -293,7 +324,7 @@ def test_watchlist_add_success(sent, monkeypatch) -> None:
 def test_watchlist_add_stores_fetched_name(sent, monkeypatch) -> None:
     _patch_fetch(
         monkeypatch,
-        lambda code, start, end: _report(code, days=10, name="华夏成长"),
+        lambda code, count: _report(code, days=10, name="华夏成长"),
         watchlist_add,
     )
     added: list[tuple[str, str, str]] = []
@@ -310,7 +341,9 @@ def test_watchlist_add_stores_fetched_name(sent, monkeypatch) -> None:
 
 
 def test_watchlist_add_existing(sent, monkeypatch) -> None:
-    _patch_fetch(monkeypatch, lambda code, start, end: _report(code, days=10), watchlist_add)
+    _patch_fetch(
+        monkeypatch, lambda code, count: _report(code, days=10), watchlist_add
+    )
     monkeypatch.setattr(watchlist_add.db, "add_watch", lambda *args: False)
     watchlist_add.handle_watchlist_add("ou_1", ["000001"])
     assert sent.texts[0][1] == "该基金已在自选中"
@@ -329,7 +362,7 @@ def test_watchlist_add_argument_counts(sent) -> None:
 
 
 def test_watchlist_add_fetch_error_and_empty(sent, monkeypatch) -> None:
-    def raising(code, start, end):
+    def raising(code, count):
         raise ValueError("network")
 
     _patch_fetch(monkeypatch, raising, watchlist_add)
@@ -338,7 +371,7 @@ def test_watchlist_add_fetch_error_and_empty(sent, monkeypatch) -> None:
 
     _patch_fetch(
         monkeypatch,
-        lambda code, start, end: FundReport(code=code, name=code, points=[]),
+        lambda code, count: FundReport(code=code, name=code, points=[]),
         watchlist_add,
     )
     watchlist_add.handle_watchlist_add("ou_1", ["999999"])

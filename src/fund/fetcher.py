@@ -45,37 +45,41 @@ def _to_float(value: object) -> float | None:
     return result
 
 
-def _to_points(frame: pd.DataFrame, start_time: date, end_time: date) -> list[NavPoint]:
+def _to_points(frame: pd.DataFrame, count: int) -> list[NavPoint]:
     if frame is None or frame.empty:
         return []
+
     points: list[NavPoint] = []
     for point_date, nav, growth in frame.itertuples(index=False, name=None):
         if not isinstance(point_date, date):
-            continue
-        if point_date < start_time or point_date > end_time:
             continue
         nav_value = _to_float(nav)
         if nav_value is None:
             continue
         points.append(NavPoint(date=point_date, nav=nav_value, growth=_to_float(growth)))
+
     points.sort(key=lambda point: point.date)
-    return points
+
+    return points[-count:]
 
 
-def fetch(code: str, start_time: date, end_time: date) -> FundReport:
-    """取回该基金在 [start_time, end_time] 内的净值记录。"""
+def fetch(code: str, count: int) -> FundReport:
+    # 返回该基金最近 count 条净值记录（按日期升序）
+
+    if count <= 0:
+        raise ValueError(f"count 必须为正整数：{count}")
 
     started = time.perf_counter()
+
     with _LOCK:
         try:
             frame = ak.fund_open_fund_info_em(symbol=code, indicator=_INDICATOR)
-            points = _to_points(frame, start_time, end_time)
+            points = _to_points(frame, count)
         except Exception as exc:
             task_log.fetch(code, _elapsed_ms(started), "FAIL")
             _discard_traceback(exc)
             raise
 
-        name = code
         try:
             info = ak.fund_individual_basic_info_xq(symbol=code)
             matched = info.loc[info["item"] == "基金名称", "value"]
@@ -85,4 +89,5 @@ def fetch(code: str, start_time: date, end_time: date) -> FundReport:
             name = code
 
         task_log.fetch(code, _elapsed_ms(started), "OK")
+
         return FundReport(code=code, name=name, points=points)

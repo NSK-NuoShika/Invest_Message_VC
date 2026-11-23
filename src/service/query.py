@@ -2,20 +2,21 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date
 
 from database import db
 from fund import fetcher
 from larkbot import send
 from pdf.renderer import ChartSpec, FundBlock, render
 
-RANGE_WORDS: dict[str, int] = {
+# 区间词对应的净值记录条数，按交易日累计。
+RANGE_COUNTS: dict[str, int] = {
     "今天": 1,
     "7天": 7,
     "30天": 30,
     "1年": 365,
     "3年": 1095,
-    "5年": 1826,
+    "5年": 1825,
 }
 
 _RANGE_CAPTIONS: dict[str, str] = {
@@ -43,11 +44,6 @@ def _split_args(args: list[str]) -> tuple[str | None, list[str]]:
     return None, args
 
 
-def _chart_points(points: list, end_time: date, days: int) -> list:
-    start_time = end_time - timedelta(days=days)
-    return [point for point in points if point.date >= start_time]
-
-
 def handle_query(user_id: str, args: list[str]) -> None:
 
     code, words = _split_args(args)
@@ -57,7 +53,7 @@ def handle_query(user_id: str, args: list[str]) -> None:
         return
 
     for word in words:
-        if word not in RANGE_WORDS:
+        if word not in RANGE_COUNTS:
             send.send_text(
                 user_id, f"区间词不合法：{word}\n可用区间词：{_WORDS_TEXT}"
             )
@@ -72,12 +68,11 @@ def handle_query(user_id: str, args: list[str]) -> None:
     else:
         targets = [(code, None)]
 
-    max_days = max(RANGE_WORDS[word] for word in words)
-    end_time = _today()
-    start_time = end_time - timedelta(days=max_days)
+    need = max(RANGE_COUNTS[word] for word in words)
+    today = _today()
     chart_words = sorted(
         (word for word in words if word != "今天"),
-        key=lambda word: RANGE_WORDS[word],
+        key=lambda word: RANGE_COUNTS[word],
     )
 
     blocks: list[FundBlock] = []
@@ -85,7 +80,7 @@ def handle_query(user_id: str, args: list[str]) -> None:
 
     for fund_code, fund_name in targets:
         try:
-            report = fetcher.fetch(fund_code, start_time, end_time)
+            report = fetcher.fetch(fund_code, need)
         except Exception:
             failures.append(fund_code)
             continue
@@ -105,11 +100,11 @@ def handle_query(user_id: str, args: list[str]) -> None:
                 name=name,
                 day_change=last.growth,
                 day_change_date=last.date,
-                updated_today=last.date == end_time,
+                updated_today=last.date == today,
                 charts=[
                     ChartSpec(
                         caption=_RANGE_CAPTIONS[word],
-                        points=_chart_points(points, end_time, RANGE_WORDS[word]),
+                        points=points[-RANGE_COUNTS[word]:],
                     )
                     for word in chart_words
                 ],
@@ -136,4 +131,4 @@ def handle_query(user_id: str, args: list[str]) -> None:
         send.send_text(user_id, "PDF 生成失败，请稍后重试")
         return
 
-    send.send_file(user_id, f"基金_{end_time:%Y%m%d}.pdf", data)
+    send.send_file(user_id, f"基金_{today:%Y%m%d}.pdf", data)
