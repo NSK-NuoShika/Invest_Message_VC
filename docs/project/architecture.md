@@ -135,9 +135,9 @@ log
 
 ### `src/fund` —— 基金
 
-调用 akshare。按调用方给出的起止日期取回该基金的净值记录。
+调用 akshare。按调用方给出的条数，取回该基金最近的净值记录。
 
-- `fetcher.py` —— 调用 akshare 取数据。
+- `fetcher.py` —— 调用 akshare 取数据；返回最近 N 条净值记录，按日期升序，不足 N 条时返回已有的全部。
 
 ### `src/pdf` —— PDF
 
